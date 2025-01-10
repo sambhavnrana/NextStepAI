@@ -1,7 +1,8 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import { db } from "../lib/prisma";
+import { db } from "@/lib/prisma.js";
+import { generateAIInsights } from "./dashboard";
 
 export async function updateUser(data) {
   const { userId } = await auth();
@@ -27,17 +28,13 @@ export async function updateUser(data) {
         // if industry doesn't exist, create it witj default values - will replace it with AI later
 
         if (!industryInsight) {
-          industryInsight = await tx.industryInsight.create({
+          const insights = await generateAIInsights(data.industry);
+
+          industryInsight = await db.industryInsight.create({
             data: {
               industry: data.industry,
-              salaryRanges: [],
-              growthRate: 0,
-              demandLevel: "MEDIUM",
-              topSkills: [],
-              marketOutlook: "NEUTRAL",
-              keyTrends: [],
-              recommendedSkills: [],
-              nextUpdate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+              ...insights,
+              nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
             },
           });
         }
@@ -72,14 +69,6 @@ export async function getUserOnboardingStatus() {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
-  const user = await db.user.findUnique({
-    where: {
-      clerkUserId: userId,
-    },
-  });
-
-  if (!user) throw new Error("User not found");
-
   try {
     const user = await db.user.findUnique({
       where: {
@@ -90,8 +79,10 @@ export async function getUserOnboardingStatus() {
       },
     });
 
+    if (!user) throw new Error("User not found");
+
     return {
-      isOnboarding: !!user?.industry,
+      isOnboarded: !!user.industry,
     };
   } catch (error) {
     console.error("Error checking onboarding status:", error.message);
