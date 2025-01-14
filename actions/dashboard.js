@@ -45,6 +45,9 @@ export async function getIndustryInsights() {
     include: {
       industryInsight: true,
     },
+    include: {
+      industryInsight: true,
+    },
   });
 
   if (!user) throw new Error("User not found");
