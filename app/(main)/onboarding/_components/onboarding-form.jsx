@@ -28,7 +28,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import useFetch from "@/app/hooks/use-fetch";
+import useFetch from "@/hooks/use-fetch";
 import { updateUser } from "@/actions/user";
 
 const OnboardingForm = ({ industries }) => {
