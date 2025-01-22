@@ -5,6 +5,7 @@ import Header from "@/components/header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Toaster } from "@/components/ui/sonner";
+import { checkUser } from "@/lib/checkUser";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,7 +14,9 @@ export const metadata = {
   description: "NextStepAI - helping you get a job using AI",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  await checkUser();
+
   return (
     <ClerkProvider
       appearance={{

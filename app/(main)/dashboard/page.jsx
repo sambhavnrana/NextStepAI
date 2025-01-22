@@ -1,20 +1,19 @@
 import { getIndustryInsights } from "@/actions/dashboard";
-import { getUserOnboardingStatus } from "@/actions/user";
 import { redirect } from "next/navigation";
 import DashboardView from "./_components/dashboard-view";
+import { checkUser } from "@/lib/checkUser";
 
 const IndustryInsightsPage = async () => {
-    const { isOnboarded } = await getUserOnboardingStatus();
-    const insights = await getIndustryInsights();
-
-    if (!isOnboarded) {
-        redirect('/onboarding')
+    const user = await checkUser();
+    if (!user.industry) {
+        redirect('/onboarding');
     }
+    const insights = await getIndustryInsights();
     return (
         <div>
             <DashboardView insights={insights} />
         </div>
-    )
+    );
 }
 
-export default IndustryInsightsPage
+export default IndustryInsightsPage;
