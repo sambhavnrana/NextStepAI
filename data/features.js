@@ -22,6 +22,6 @@ export const features = [
   {
     icon: <ScrollText className="w-10 h-10 mb-4 text-primary" />,
     title: "Smart Resume Creation",
-    description: "Generate ATS-optimized resumes with AI assistance.",
+    description: "Generate optimized resumes with AI assistance.",
   },
 ];

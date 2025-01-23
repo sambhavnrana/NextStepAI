@@ -2,31 +2,26 @@ export const faqs = [
   {
     question: "What makes NextStepAI unique as a career development tool?",
     answer:
-      "NextStepAI combines AI-powered career tools with industry-specific insights to help you advance your career. Our platform offers three main features: an intelligent resume builder, a cover letter generator, and an adaptive interview preparation system. Each tool is tailored to your industry and skills, providing personalized guidance for your professional journey.",
+      "NextStepAI stands out by combining AI-driven tools with industry-specific insights to support your career growth. The platform features three core offerings: an intelligent resume builder, a cover letter generator, and an adaptive interview prep system. Each tool is tailored to your industry and skill set, delivering personalized guidance throughout your professional journey.",
   },
   {
     question: "How does NextStepAI create tailored content?",
     answer:
-      "NextStepAI learns about your industry, experience, and skills during onboarding. It then uses this information to generate customized resumes, cover letters, and interview questions. The content is specifically aligned with your professional background and industry standards, making it highly relevant and effective.",
+      "During onboarding, NextStepAI gathers information about your industry, experience, and skills. It then uses this data to generate personalized resumes, cover letters, and interview questions. All content is carefully aligned with your background and industry norms to ensure maximum relevance and impact.",
   },
   {
     question: "How accurate and up-to-date are NextStepAI's industry insights?",
     answer:
-      "We update our industry insights weekly using advanced AI analysis of current market trends. This includes salary data, in-demand skills, and industry growth patterns. Our system constantly evolves to ensure you have the most relevant information for your career decisions.",
-  },
-  {
-    question: "Is my data secure with NextStepAI?",
-    answer:
-      "Absolutely. We prioritize the security of your professional information. All data is encrypted and securely stored using industry-standard practices. We use Clerk for authentication and never share your personal information with third parties.",
+      "Our industry insights are updated weekly through advanced AI analysis of current market trends. This includes data on salaries, in-demand skills, and sector growth. The platform continuously evolves to provide you with the most relevant and timely information for making informed career decisions.",
   },
   {
     question: "How can I track my interview preparation progress?",
     answer:
-      "NextStepAI tracks your performance across multiple practice interviews, providing detailed analytics and improvement suggestions. You can view your progress over time, identify areas for improvement, and receive AI-generated tips to enhance your interview skills based on your responses.",
+      "NextStepAI monitors your performance across practice interviews, offering detailed analytics and targeted feedback. You'll be able to track your progress over time, identify improvement areas, and receive AI-powered suggestions to enhance your interview skills based on your responses.",
   },
   {
     question: "Can I edit the AI-generated content?",
     answer:
-      "Yes! While NextStepAI generates high-quality initial content, you have full control to edit and customize all generated resumes, cover letters, and other content. Our markdown editor makes it easy to refine the content to perfectly match your needs.",
+      "Yes, absolutely. While NextStepAI provides high-quality content out of the box, you have full control to edit and personalize everything it generates—from resumes to cover letters. Our built-in markdown editor makes it easy to fine-tune the content to perfectly fit your goals.",
   },
 ];

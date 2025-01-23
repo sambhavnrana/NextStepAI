@@ -6,6 +6,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Toaster } from "@/components/ui/sonner";
 import { checkUser } from "@/lib/checkUser";
+import Link from "next/link";
+import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,16 +33,10 @@ export default async function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
-            {/* header */}
             <Header />
             <main className="min-h-screen">{children}</main>
             <Toaster richColors />
-            {/* footer */}
-            <footer className="bg-muted/50 py-12">
-              <div className="container mx-auto p-4 text-center text-gray-200">
-                <p>Made with ❤️ by Sambhav Rana</p>
-              </div>
-            </footer>
+            <Footer />
           </ThemeProvider>
         </body>
       </html>
