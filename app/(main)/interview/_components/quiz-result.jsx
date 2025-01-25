@@ -1,9 +1,12 @@
 "use client";
 
-import { Trophy, CheckCircle2, XCircle } from "lucide-react";
+import { Trophy, CheckCircle2, XCircle, Star, StarOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
+import { updateBookmarkedQuestions } from "@/actions/interview";
+import { toast } from "sonner";
 
 export default function QuizResult({
   result,
@@ -11,6 +14,35 @@ export default function QuizResult({
   onStartNew,
 }) {
   if (!result) return null;
+
+  const [bookmarked, setBookmarked] = useState(
+    result.bookmarkedQuestions || []
+  );
+  const [loading, setLoading] = useState(false);
+
+  const isBookmarked = (q) => bookmarked.some((b) => b.question === q.question);
+
+  const handleBookmark = async (q) => {
+    setLoading(true);
+    let updated;
+    if (isBookmarked(q)) {
+      updated = bookmarked.filter((b) => b.question !== q.question);
+    } else {
+      updated = [...bookmarked, { question: q.question }];
+    }
+    setBookmarked(updated);
+    try {
+      await updateBookmarkedQuestions(result.id, updated);
+      toast.success(
+        isBookmarked(q) ? "Removed bookmark" : "Bookmarked for review"
+      );
+    } catch (e) {
+      toast.error("Failed to update bookmarks");
+      setBookmarked(bookmarked);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="mx-auto">
@@ -41,11 +73,28 @@ export default function QuizResult({
             <div key={index} className="border rounded-lg p-4 space-y-2">
               <div className="flex items-start justify-between gap-2">
                 <p className="font-medium">{q.question}</p>
-                {q.isCorrect ? (
-                  <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
-                ) : (
-                  <XCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
-                )}
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={
+                      isBookmarked(q) ? "Remove bookmark" : "Bookmark"
+                    }
+                    onClick={() => handleBookmark(q)}
+                    disabled={loading}
+                  >
+                    {isBookmarked(q) ? (
+                      <Star className="h-5 w-5 text-yellow-500 fill-yellow-400" />
+                    ) : (
+                      <StarOff className="h-5 w-5 text-muted-foreground" />
+                    )}
+                  </Button>
+                  {q.isCorrect ? (
+                    <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
+                  ) : (
+                    <XCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+                  )}
+                </div>
               </div>
               <div className="text-sm text-muted-foreground">
                 <p>Your answer: {q.userAnswer}</p>

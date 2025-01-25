@@ -4,6 +4,7 @@ import PerformanceChart from "./_components/performace-chart";
 import QuizList from "./_components/quiz-list";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import BookmarkedQuestionsClient from "./_components/bookmarked-questions-client";
 
 export default async function InterviewPrepPage() {
   const assessments = await getAssessments();
@@ -21,11 +22,13 @@ export default async function InterviewPrepPage() {
           </div>
         </Link>
       </div>
-      <div className="space-y-6 animate-fade-in-up duration-1000">
-        <StatsCards assessments={assessments} />
-        <PerformanceChart assessments={assessments} />
-        <QuizList assessments={assessments} />
-      </div>
+      <BookmarkedQuestionsClient assessments={assessments}>
+        <div className="space-y-6 animate-fade-in-up duration-1000">
+          <StatsCards assessments={assessments} />
+          <PerformanceChart assessments={assessments} />
+          <QuizList assessments={assessments} />
+        </div>
+      </BookmarkedQuestionsClient>
     </div>
   );
 }

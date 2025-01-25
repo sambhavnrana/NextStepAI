@@ -53,11 +53,21 @@ export async function generateQuiz() {
     return quiz.questions;
   } catch (error) {
     console.error("Error generating quiz:", error);
-    throw new Error("Failed to generate quiz questions");
+    if (error?.status === 503 || error?.statusText === "Service Unavailable") {
+      throw new Error(
+        "Our AI quiz generator is currently overloaded. Please try again in a few minutes!"
+      );
+    }
+    throw new Error("Facing heavy demand. Please try after some time!");
   }
 }
 
-export async function saveQuizResult(questions, answers, score) {
+export async function saveQuizResult(
+  questions,
+  answers,
+  score,
+  bookmarkedQuestions = []
+) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
@@ -115,6 +125,7 @@ export async function saveQuizResult(questions, answers, score) {
         questions: questionResults,
         category: "Technical",
         improvementTip,
+        bookmarkedQuestions,
       },
     });
 
@@ -150,4 +161,26 @@ export async function getAssessments() {
     console.error("Error fetching assessments:", error);
     throw new Error("Failed to fetch assessments");
   }
+}
+
+export async function updateBookmarkedQuestions(
+  assessmentId,
+  bookmarkedQuestions
+) {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const assessment = await db.assessment.findUnique({
+    where: { id: assessmentId },
+    select: { userId: true },
+  });
+  if (!assessment || assessment.userId !== userId) {
+    throw new Error("Assessment not found or access denied");
+  }
+
+  const updated = await db.assessment.update({
+    where: { id: assessmentId },
+    data: { bookmarkedQuestions },
+  });
+  return updated;
 }

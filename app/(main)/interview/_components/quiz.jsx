@@ -16,16 +16,19 @@ import { generateQuiz, saveQuizResult } from "@/actions/interview";
 import QuizResult from "./quiz-result";
 import useFetch from "@/hooks/use-fetch";
 import { BarLoader } from "react-spinners";
+import { Star, StarOff } from "lucide-react";
 
 export default function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [bookmarked, setBookmarked] = useState([]);
 
   const {
     loading: generatingQuiz,
     fn: generateQuizFn,
     data: quizData,
+    error,
   } = useFetch(generateQuiz);
 
   const {
@@ -46,6 +49,15 @@ export default function Quiz() {
     newAnswers[currentQuestion] = answer;
     setAnswers(newAnswers);
   };
+
+  const handleBookmark = (q) => {
+    if (bookmarked.some((b) => b.question === q.question)) {
+      setBookmarked(bookmarked.filter((b) => b.question !== q.question));
+    } else {
+      setBookmarked([...bookmarked, { question: q.question }]);
+    }
+  };
+  const isBookmarked = (q) => bookmarked.some((b) => b.question === q.question);
 
   const handleNext = () => {
     if (currentQuestion < quizData.length - 1) {
@@ -69,7 +81,7 @@ export default function Quiz() {
   const finishQuiz = async () => {
     const score = calculateScore();
     try {
-      await saveQuizResultFn(quizData, answers, score);
+      await saveQuizResultFn(quizData, answers, score, bookmarked);
       toast.success("Quiz completed!");
     } catch (error) {
       toast.error(error.message || "Failed to save quiz results");
@@ -86,6 +98,27 @@ export default function Quiz() {
 
   if (generatingQuiz) {
     return <BarLoader className="mt-4" width={"100%"} color="gray" />;
+  }
+
+  if (
+    !generatingQuiz &&
+    quizData === undefined &&
+    typeof error === "object" &&
+    error?.message
+  ) {
+    return (
+      <Card className="mx-2">
+        <CardHeader>
+          <CardTitle>Quiz Generation Error</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-red-600 mb-2">{error.message}</div>
+          <Button onClick={generateQuizFn} className="w-full mt-2">
+            Try Again
+          </Button>
+        </CardContent>
+      </Card>
+    );
   }
 
   if (resultData) {
@@ -127,7 +160,21 @@ export default function Quiz() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p className="text-lg font-medium">{question.question}</p>
+        <p className="text-lg font-medium flex items-center justify-between">
+          {question.question}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={isBookmarked(question) ? "Remove bookmark" : "Bookmark"}
+            onClick={() => handleBookmark(question)}
+          >
+            {isBookmarked(question) ? (
+              <Star className="h-12 w-12 text-yellow-500 fill-yellow-400  lg:h-8 lg:w-8" />
+            ) : (
+              <StarOff className="h-12 w-12 text-muted-foreground lg:h-8 lg:w-8" />
+            )}
+          </Button>
+        </p>
         <RadioGroup
           onValueChange={handleAnswer}
           value={answers[currentQuestion]}
