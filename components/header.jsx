@@ -99,6 +99,16 @@ export default async function Header() {
           </SignedOut>
 
           <SignedIn>
+            <Link href="/profile" aria-label="Update Profile">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="mr-1 rounded-full p-0 hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+              >
+                <PenBox className="h-6 w-6" />
+                <span className="sr-only">Update Profile</span>
+              </Button>
+            </Link>
             <UserButton
               appearance={{
                 elements: {
