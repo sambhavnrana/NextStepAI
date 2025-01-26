@@ -129,11 +129,10 @@ export default function ResumeBuilder({ initialContent }) {
     } catch (error) {
       console.error("PDF generation error:", error);
     } finally {
-      setIsGenerating(false); // Ensure button is re-enabled
+      setIsGenerating(false);
     }
   };
 
-  // Update onSubmit to not require data
   const onSubmit = async () => {
     setSaveAttempted(true);
     if (!isValid) return;
@@ -149,17 +148,14 @@ export default function ResumeBuilder({ initialContent }) {
     }
   };
 
-  // Helper to collect missing/invalid fields for summary
   const getMissingFields = () => {
     const missing = [];
     if (errors.contactInfo?.email) missing.push("Email");
     if (errors.summary) missing.push("Professional Summary");
     if (errors.skills) missing.push("Skills");
-    // You can add more fields as needed
     return missing;
   };
 
-  // Set saveAttempted to true on invalid submit
   const onInvalid = () => setSaveAttempted(true);
 
   return (

@@ -10,6 +10,7 @@ export default function BookmarkedQuestionsClient({ assessments, children }) {
     <div>
       <div className="flex justify-end mb-4">
         <Button
+          className="cursor-pointer"
           variant={showBookmarks ? "default" : "outline"}
           onClick={() => setShowBookmarks((v) => !v)}
         >

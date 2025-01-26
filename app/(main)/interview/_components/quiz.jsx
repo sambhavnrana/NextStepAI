@@ -169,9 +169,9 @@ export default function Quiz() {
             onClick={() => handleBookmark(question)}
           >
             {isBookmarked(question) ? (
-              <Star className="h-12 w-12 text-yellow-500 fill-yellow-400  lg:h-8 lg:w-8" />
+              <Star className="h-12 w-12 text-yellow-500 fill-yellow-400" />
             ) : (
-              <StarOff className="h-12 w-12 text-muted-foreground lg:h-8 lg:w-8" />
+              <StarOff className="h-12 w-12 text-muted-foreground " />
             )}
           </Button>
         </p>

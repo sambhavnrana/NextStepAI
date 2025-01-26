@@ -1,12 +1,11 @@
 "use client";
 
-import { Trophy, CheckCircle2, XCircle, Star, StarOff } from "lucide-react";
+import { Trophy, CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { useState } from "react";
-import { updateBookmarkedQuestions } from "@/actions/interview";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function QuizResult({
   result,
@@ -15,34 +14,7 @@ export default function QuizResult({
 }) {
   if (!result) return null;
 
-  const [bookmarked, setBookmarked] = useState(
-    result.bookmarkedQuestions || []
-  );
-  const [loading, setLoading] = useState(false);
-
-  const isBookmarked = (q) => bookmarked.some((b) => b.question === q.question);
-
-  const handleBookmark = async (q) => {
-    setLoading(true);
-    let updated;
-    if (isBookmarked(q)) {
-      updated = bookmarked.filter((b) => b.question !== q.question);
-    } else {
-      updated = [...bookmarked, { question: q.question }];
-    }
-    setBookmarked(updated);
-    try {
-      await updateBookmarkedQuestions(result.id, updated);
-      toast.success(
-        isBookmarked(q) ? "Removed bookmark" : "Bookmarked for review"
-      );
-    } catch (e) {
-      toast.error("Failed to update bookmarks");
-      setBookmarked(bookmarked);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const router = useRouter();
 
   return (
     <div className="mx-auto">
@@ -74,21 +46,6 @@ export default function QuizResult({
               <div className="flex items-start justify-between gap-2">
                 <p className="font-medium">{q.question}</p>
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={
-                      isBookmarked(q) ? "Remove bookmark" : "Bookmark"
-                    }
-                    onClick={() => handleBookmark(q)}
-                    disabled={loading}
-                  >
-                    {isBookmarked(q) ? (
-                      <Star className="h-5 w-5 text-yellow-500 fill-yellow-400" />
-                    ) : (
-                      <StarOff className="h-5 w-5 text-muted-foreground" />
-                    )}
-                  </Button>
                   {q.isCorrect ? (
                     <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
                   ) : (
@@ -110,13 +67,22 @@ export default function QuizResult({
       </CardContent>
 
       {!hideStartNew && (
-        <CardFooter>
+        <CardFooter className="flex flex-col sm:flex-row gap-8 mt-2 lg:mt-5">
           <Button
-            onClick={onStartNew}
-            className="animate-bounce hover:animate-none hover:scale-105 w-full"
+            onClick={() => router.push("/interview")}
+            variant="secondary"
+            className="text-lg flex-1 mt-5 sm:mt-0 hover:scale-105 border-1 border-white gradient-text"
           >
-            Start New Quiz
+            Back to Dashboard
           </Button>
+          {!hideStartNew && (
+            <Button
+              onClick={onStartNew}
+              className="text-lg flex-1 hover:animate-none hover:scale-105"
+            >
+              Start New Quiz
+            </Button>
+          )}
         </CardFooter>
       )}
     </div>
