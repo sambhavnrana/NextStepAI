@@ -23,19 +23,21 @@ import useFetch from "@/hooks/use-fetch";
 import { useUser } from "@clerk/nextjs";
 import { entriesToMarkdown } from "@/app/lib/helper";
 import { resumeSchema } from "@/app/lib/schema";
+import { useRef } from "react";
 
 export default function ResumeBuilder({ initialContent }) {
   const [activeTab, setActiveTab] = useState("edit");
   const [previewContent, setPreviewContent] = useState(initialContent);
   const { user } = useUser();
   const [resumeMode, setResumeMode] = useState("preview");
+  const [saveAttempted, setSaveAttempted] = useState(false);
 
   const {
     control,
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({
     resolver: zodResolver(resumeSchema),
     defaultValues: {
@@ -46,6 +48,8 @@ export default function ResumeBuilder({ initialContent }) {
       education: [],
       projects: [],
     },
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
 
   const {
@@ -125,22 +129,38 @@ export default function ResumeBuilder({ initialContent }) {
     } catch (error) {
       console.error("PDF generation error:", error);
     } finally {
+      setIsGenerating(false); // Ensure button is re-enabled
     }
   };
 
-  const onSubmit = async (data) => {
+  // Update onSubmit to not require data
+  const onSubmit = async () => {
+    setSaveAttempted(true);
+    if (!isValid) return;
     try {
       const formattedContent = previewContent
         .replace(/\n/g, "\n")
-        .replace(/\n\s*\n/g, "\n\n") 
+        .replace(/\n\s*\n/g, "\n\n")
         .trim();
 
-      console.log(previewContent, formattedContent);
-      await saveResumeFn(previewContent);
+      await saveResumeFn(formattedContent);
     } catch (error) {
       console.error("Save error:", error);
     }
   };
+
+  // Helper to collect missing/invalid fields for summary
+  const getMissingFields = () => {
+    const missing = [];
+    if (errors.contactInfo?.email) missing.push("Email");
+    if (errors.summary) missing.push("Professional Summary");
+    if (errors.skills) missing.push("Skills");
+    // You can add more fields as needed
+    return missing;
+  };
+
+  // Set saveAttempted to true on invalid submit
+  const onInvalid = () => setSaveAttempted(true);
 
   return (
     <div data-color-mode="light" className="space-y-4">
@@ -151,7 +171,7 @@ export default function ResumeBuilder({ initialContent }) {
         <div className="space-x-2 md:space-x-4 ">
           <Button
             variant="destructive"
-            onClick={handleSubmit(onSubmit)}
+            onClick={handleSubmit(onSubmit, onInvalid)}
             disabled={isSaving}
             className="duration-700 delay-200 hover:scale-105 cursor-pointer transition-transform bg-green-600 hover:bg-green-700 text-white"
           >
@@ -214,10 +234,10 @@ export default function ResumeBuilder({ initialContent }) {
                     placeholder="your@email.com"
                     error={errors.contactInfo?.email}
                   />
-                  {errors.contactInfo?.email && (
-                    <p className="text-sm text-red-500">
+                  {saveAttempted && errors.contactInfo?.email && (
+                    <span className="text-sm text-red-500 ml-2 align-middle">
                       {errors.contactInfo.email.message}
-                    </p>
+                    </span>
                   )}
                 </div>
                 <div className="space-y-2">
@@ -279,8 +299,10 @@ export default function ResumeBuilder({ initialContent }) {
                   />
                 )}
               />
-              {errors.summary && (
-                <p className="text-sm text-red-500">{errors.summary.message}</p>
+              {saveAttempted && errors.summary && (
+                <span className="text-sm text-red-500 ml-2 align-middle">
+                  {errors.summary.message}
+                </span>
               )}
             </div>
 
@@ -299,8 +321,10 @@ export default function ResumeBuilder({ initialContent }) {
                   />
                 )}
               />
-              {errors.skills && (
-                <p className="text-sm text-red-500">{errors.skills.message}</p>
+              {saveAttempted && errors.skills && (
+                <span className="text-sm text-red-500 ml-2 align-middle">
+                  {errors.skills.message}
+                </span>
               )}
             </div>
 
@@ -366,6 +390,29 @@ export default function ResumeBuilder({ initialContent }) {
                 </p>
               )}
             </div>
+
+            {/* Save button at the bottom of the form */}
+            <div className="flex justify-center pt-4">
+              <Button
+                variant="destructive"
+                onClick={handleSubmit(onSubmit, onInvalid)}
+                disabled={isSaving}
+                className="duration-700 delay-200 hover:scale-105 cursor-pointer transition-transform bg-green-600 hover:bg-green-700 text-white"
+                type="button"
+              >
+                {isSaving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    Save
+                  </>
+                )}
+              </Button>
+            </div>
           </form>
         </TabsContent>
 
@@ -397,7 +444,7 @@ export default function ResumeBuilder({ initialContent }) {
             <div className="flex p-3 gap-2 items-center border-2 border-yellow-600 text-yellow-600 rounded mb-2">
               <AlertTriangle className="h-5 w-5" />
               <span className="text-sm">
-                You will lose editied markdown if you update the form data.
+                You will lose edited markdown if you update the form data.
               </span>
             </div>
           )}
