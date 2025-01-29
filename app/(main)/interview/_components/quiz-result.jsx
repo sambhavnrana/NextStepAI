@@ -16,9 +16,13 @@ export default function QuizResult({
 
   const router = useRouter();
 
+  const totalQuestions = result.questions.length;
+  const correctAnswers = result.questions.filter((q) => q.isCorrect).length;
+  const incorrectAnswers = totalQuestions - correctAnswers;
+
   return (
-    <div className="mx-auto">
-      <h1 className="flex items-center gap-2 text-3xl gradient-title">
+    <div className="mx-auto w-full max-w-2xl lg:max-w-4xl xl:max-w-5xl">
+      <h1 className="flex items-center gap-2 text-3xl gradient-text">
         <Trophy className="h-6 w-6 text-yellow-500" />
         Quiz Results
       </h1>
@@ -26,8 +30,25 @@ export default function QuizResult({
       <CardContent className="space-y-6">
         {/* Score Overview */}
         <div className="text-center space-y-2">
-          <h3 className="text-2xl font-bold">{result.quizScore.toFixed(1)}%</h3>
+          <h3 className="text-2xl font-bold  gradient-title">
+            {result.quizScore.toFixed(1)}%
+          </h3>
           <Progress value={result.quizScore} className="w-full" />
+        </div>
+
+        {/* More Stats */}
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-base sm:text-lg font-medium py-2">
+          <div className="block md:hidden">Questions: {totalQuestions}</div>
+          <div className="hidden md:block">
+            Total Questions: {totalQuestions}
+          </div>
+
+          <div>
+            Correct: <span className="text-green-600">{correctAnswers}</span>
+          </div>
+          <div>
+            Incorrect: <span className="text-red-600">{incorrectAnswers}</span>
+          </div>
         </div>
 
         {/* Improvement Tip */}
