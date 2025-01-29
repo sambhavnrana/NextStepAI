@@ -71,7 +71,7 @@ export default function QuizResult({
           <Button
             onClick={() => router.push("/interview")}
             variant="secondary"
-            className="text-lg flex-1 mt-5 sm:mt-0 hover:scale-105 border-1 border-white gradient-text"
+            className="text-lg flex-1 mt-5 sm:mt-0 hover:scale-105 border-1 border-white gradient-text cursor-pointer"
           >
             Back to Dashboard
           </Button>

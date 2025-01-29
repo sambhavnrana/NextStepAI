@@ -26,8 +26,8 @@ export default async function EditProfilePage() {
   };
 
   return (
-    <main>
-      <h1 className="text-3xl font-bold mb-6 gradient-title text-center">
+    <main className="animate-fade-in-up  px-5">
+      <h1 className="animate-fade-in-down text-4xl lg:text-6xl font-bold gradient-title">
         Edit Profile
       </h1>
       <OnboardingForm

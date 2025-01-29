@@ -65,20 +65,20 @@ export default function Home() {
       <section className="w-full py-12 md:py-24 bg-muted/50 animate-fade-in-up duration-700 delay-300">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto text-center">
-            {["50+", "1000+", "95%", "24/7"].map((stat, i) => (
+            {["50+", "10,000+", "98%", "24/7"].map((stat, i) => (
               <div
                 key={i}
                 className={`flex flex-col gradient-text items-center justify-center space-y-2 animate-fade-in-up duration-700 delay-${
                   400 + i * 100
                 }`}
               >
-                <h3 className="text-4xl font-bold">{stat}</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-4xl lg:text-5xl font-bold">{stat}</h3>
+                <p className="text-muted-foreground text-lg">
                   {
                     [
                       "Industries Covered",
                       "Interview Questions",
-                      "Success Rate",
+                      "Uptime",
                       "AI Support",
                     ][i]
                   }
@@ -96,7 +96,7 @@ export default function Home() {
             <h2 className="text-2xl md:text-5xl font-bold mb-4 animate-fade-in duration-700 delay-500 gradient-text">
               How It Works
             </h2>
-            <p className="text-muted-foreground animate-fade-in duration-700 delay-600 sm:text-base md:text-lg">
+            <p className="text-muted-foreground animate-fade-in duration-700 delay-600 sm:text-base md:text-xl">
               Four simple steps to accelerate your career growth
             </p>
           </div>
@@ -140,7 +140,7 @@ export default function Home() {
                   }`}
                 >
                   <AccordionItem value={`item-${index}`}>
-                    <AccordionTrigger className="text-left">
+                    <AccordionTrigger className="text-left cursor-pointer ">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent>{faq.answer}</AccordionContent>

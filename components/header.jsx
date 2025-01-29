@@ -103,7 +103,7 @@ export default async function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="mr-1 rounded-full p-0 hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+                className="mr-1 rounded-full p-0 hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary cursor-pointer border"
               >
                 <PenBox className="h-6 w-6" />
                 <span className="sr-only">Update Profile</span>

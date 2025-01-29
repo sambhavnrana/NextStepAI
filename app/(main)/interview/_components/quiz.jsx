@@ -136,13 +136,42 @@ export default function Quiz() {
           <CardTitle>Ready to test your knowledge?</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">
-            This quiz contains 10 questions specific to your industry and
-            skills. Take your time and choose the best answer for each question.
-          </p>
+          <div className="text-muted-foreground space-y-2">
+            <ul className="list-disc list-inside text-base space-y-1">
+              <li>
+                This quiz contains 10 questions tailored to your industry,
+                skills and years of experience. (You can update these on your{" "}
+                <a href="/profile" className="underline text-primary">
+                  profile
+                </a>{" "}
+                page.)
+              </li>
+              <li>
+                You <strong>cannot skip or revisit questions</strong> once
+                submitted. However, you can change your answer before moving to
+                the next question.
+              </li>
+
+              <li>
+                Explanation for each question will be unlocked and available to
+                view <strong>after you answer</strong>.
+              </li>
+              <li>
+                You can <strong>bookmark</strong> important, tricky or hard
+                questions to review them later.
+              </li>
+              <li>
+                After completing the test, you'll receive a detailed review of
+                each question along with personalized advice for improvement.
+              </li>
+              <li>
+                Take your time and choose the best answer for each question!
+              </li>
+            </ul>
+          </div>
         </CardContent>
         <CardFooter>
-          <Button onClick={generateQuizFn} className="w-full">
+          <Button onClick={generateQuizFn} className="w-full cursor-pointer">
             Start Quiz
           </Button>
         </CardFooter>
@@ -198,6 +227,7 @@ export default function Quiz() {
       <CardFooter className="flex justify-between">
         {!showExplanation && (
           <Button
+            className="cursor-pointer"
             onClick={() => setShowExplanation(true)}
             variant="outline"
             disabled={!answers[currentQuestion]}
@@ -208,7 +238,7 @@ export default function Quiz() {
         <Button
           onClick={handleNext}
           disabled={!answers[currentQuestion] || savingResult}
-          className="ml-auto px-5"
+          className="ml-auto px-5 cursor-pointer"
         >
           {savingResult && (
             <BarLoader className="mt-4" width={"100%"} color="gray" />
