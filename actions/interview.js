@@ -21,12 +21,12 @@ export async function generateQuiz() {
 
   if (!user) throw new Error("User not found");
 
-  const prompt = `
-    Generate 10 technical interview questions for a ${
-      user.industry
-    } professional${
-    user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
-  }.
+  const prompt = `Generate 10 technical, practical, scenario-based interview questions for a ${
+    user.industry
+  } professional with ${user.experience || 0} years of experience${
+    user.skills?.length ? ` and expertise in ${user.skills.join(", ")}` : ""
+  }. Focus on real-world problem-solving, architectural decisions, and trade-offs. Avoid simple definition or trivia-based questions.
+  
     
     Each question should be multiple choice with 4 options.
     
