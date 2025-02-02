@@ -18,9 +18,12 @@ export async function generateCoverLetter(data) {
   if (!user) throw new Error("User not found");
 
   const prompt = `
-    Write a professional cover letter for a ${data.jobTitle} position at ${
-    data.companyName
-  }.
+  Write a tailored, professional and ATS friendly cover letter for the position of ${
+    data.jobTitle
+  } at ${data.companyName}.
+  The letter should be concise, confident, and highlight how the applicant's skills align with the job role.
+  Address the letter to the appropriate hiring manager (use a generic title if unknown) and include a strong opening, key qualifications, and a compelling closing.
+
     
     About the candidate:
     - Industry: ${user.industry}
@@ -118,5 +121,25 @@ export async function deleteCoverLetter(id) {
       id,
       userId: user.id,
     },
+  });
+}
+
+export async function updateCoverLetter(id, newContent) {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const user = await db.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+  if (!user) throw new Error("User not found");
+
+  const coverLetter = await db.coverLetter.findUnique({
+    where: { id, userId: user.id },
+  });
+  if (!coverLetter) throw new Error("Cover letter not found");
+
+  return await db.coverLetter.update({
+    where: { id },
+    data: { content: newContent },
   });
 }
