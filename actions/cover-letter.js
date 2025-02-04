@@ -22,7 +22,9 @@ export async function generateCoverLetter(data) {
     data.jobTitle
   } at ${data.companyName}.
   The letter should be concise, confident, and highlight how the applicant's skills align with the job role.
-  Address the letter to the appropriate hiring manager (use a generic title if unknown) and include a strong opening, key qualifications, and a compelling closing.
+  Address the letter to the appropriate hiring manager (use a generic title if unknown) and include a strong opening, key qualifications, and a compelling closing. Highlight the previous roles from ${
+    user.bio
+  }
 
     
     About the candidate:

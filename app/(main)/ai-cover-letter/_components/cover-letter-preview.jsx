@@ -3,6 +3,17 @@
 import React, { useRef, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
 
+const PLACEHOLDER_REGEX =
+  /\[(Address|Name|Your Name|Your Address|Your Phone Number|Your Email Address|Recipient Name|Recipient Address|Recipient Email|Recipient Phone|Position|Company|Date|Salutation|Closing|Signature|Your Email|Platform where you saw the advertisement|_company-name_|_company_name_|company-name|company_name|[A-Za-z0-9 .,&'-]+ Address|[A-Za-z0-9 .,&'-]+ Name)\]/g;
+
+function highlightPlaceholders(text) {
+  return text.replace(
+    PLACEHOLDER_REGEX,
+    (match) =>
+      `<span style="background: #fff3cd; color: #856404; padding: 2px 4px; border-radius: 3px; border: 1px solid #ffeeba;">${match}</span>`
+  );
+}
+
 const CoverLetterPreview = ({ content: initialContent, onSave }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [content, setContent] = useState(initialContent);
@@ -38,8 +49,28 @@ const CoverLetterPreview = ({ content: initialContent, onSave }) => {
 
   return (
     <div className="py-4">
+      {/* Info message about placeholders */}
+      <div className="mb-4 p-3 rounded bg-yellow-100 border-l-4 border-yellow-400 text-yellow-800 text-sm">
+        <strong>Heads up!</strong> Your generated cover letter may contain
+        placeholders like <code>[Your Name]</code>, <code>[Your Address]</code>,
+        etc. Please REVIEW and REPLACE these with your actual details before
+        using or sending your cover letter !
+      </div>
       <div ref={previewRef}>
-        <MDEditor value={content} preview="preview" height={700} />
+        {/* Highlight placeholders in the preview */}
+        <MDEditor.Markdown
+          source={highlightPlaceholders(content)}
+          style={{ minHeight: 700 }}
+          components={{
+            code({ node, inline, className, children, ...props }) {
+              return (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            },
+          }}
+        />
       </div>
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

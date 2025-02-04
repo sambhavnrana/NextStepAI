@@ -173,7 +173,7 @@ const OnboardingForm = ({
               <Label htmlFor="skills">Skills</Label>
               <Input
                 id="skills"
-                placeholder="e.g., Python, JavaScript, Project Management"
+                placeholder="e.g. Python, JavaScript, Project Management  etc..."
                 {...register("skills")}
               />
               <p className="text-sm text-muted-foreground">
@@ -185,10 +185,10 @@ const OnboardingForm = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bio">Professional Bio</Label>
+              <Label htmlFor="bio">Work History & Key Accomplishments/Projects</Label>
               <Textarea
                 id="bio"
-                placeholder="Tell us about your professional background..."
+                placeholder="Summarize your work experience, roles you've held, and notable achievements..."
                 className="h-32"
                 {...register("bio")}
               />
