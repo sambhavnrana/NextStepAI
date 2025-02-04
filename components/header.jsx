@@ -9,7 +9,13 @@ import {
   StarsIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -94,8 +100,15 @@ export default async function Header() {
 
           <SignedOut>
             <SignInButton>
-              <Button variant="outline">Sign In</Button>
+              <Button variant="outline" className="cursor-pointer">
+                Sign In
+              </Button>
             </SignInButton>
+            <SignUpButton>
+              <Button variant="default" className="ml-2 cursor-pointer">
+                Sign Up
+              </Button>
+            </SignUpButton>
           </SignedOut>
 
           <SignedIn>
@@ -117,7 +130,7 @@ export default async function Header() {
                   userPreviewMainIdentifier: "font-semibold",
                 },
               }}
-              afterSignOutUrl="/"
+              signOutUrl="/"
             />
           </SignedIn>
         </div>
