@@ -22,7 +22,7 @@ export default function BookmarkedQuestions({ assessments }) {
         <CardContent>
           <p className="text-muted-foreground">
             You haven't bookmarked any questions yet. Bookmark tough questions
-            after a quiz to review them here!
+            during a quiz to review them here!
           </p>
         </CardContent>
       </Card>

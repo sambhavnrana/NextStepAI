@@ -53,7 +53,12 @@ export async function generateQuiz() {
     return quiz.questions;
   } catch (error) {
     console.error("Error generating quiz:", error);
-    if (error?.status === 503 || error?.statusText === "Service Unavailable") {
+    if (
+      error?.status === 503 ||
+      error?.statusText === "Service Unavailable" ||
+      error.statusText ===
+        "An unexpected response was received from the server."
+    ) {
       throw new Error(
         "Our AI quiz generator is currently overloaded. Please try again in a few minutes!"
       );
