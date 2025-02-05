@@ -37,7 +37,7 @@ model User {
 model Assessment {
   id             String   @id @default(cuid())
   userId         String
-  user           User     @relation(fields: [userId], references: [id])
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   quizScore      Float // Overall quiz score
   questions      Json[] // Array of {question, answer, userAnswer, isCorrect}
   category       String // "Technical", "Behavioral", etc.
@@ -52,7 +52,7 @@ model Assessment {
 model Resume {
   id        String   @id @default(cuid())
   userId    String   @unique // One resume per user
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   content   String   @db.Text // Markdown content
   atsScore  Float?
   feedback  String?
@@ -63,7 +63,7 @@ model Resume {
 model CoverLetter {
   id             String   @id @default(cuid())
   userId         String
-  user           User     @relation(fields: [userId], references: [id])
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   content        String // Markdown content
   jobDescription String?
   companyName    String // Name of the company applying to
