@@ -18,7 +18,7 @@ const Footer = () => {
       <span className=" sm:inline md:hidden">Made by </span>
       <span className=" hidden md:inline">Developed by </span>
       <Link
-        href="https://www.sambhavrana.me"
+        href="https://www.sambhavrana.dev"
         target="_blank"
         rel="noopener noreferrer"
         className="gradient-title sm:font-medium lg:font-bold sm:text-base lg:text-xl"
