@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
 
 export async function generateQuiz() {
   const { userId } = await auth();
@@ -60,7 +60,7 @@ export async function generateQuiz() {
         "An unexpected response was received from the server."
     ) {
       throw new Error(
-        "Our AI quiz generator is currently overloaded. Please try again in a few minutes!"
+        "Our AI quiz generator is currently overloaded. Please try again in a few minutes!",
       );
     }
     throw new Error("Facing heavy demand. Please try after some time!");
@@ -71,7 +71,7 @@ export async function saveQuizResult(
   questions,
   answers,
   score,
-  bookmarkedQuestions = []
+  bookmarkedQuestions = [],
 ) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
@@ -97,7 +97,7 @@ export async function saveQuizResult(
     const wrongQuestionsText = wrongAnswers
       .map(
         (q) =>
-          `Question: "${q.question}"\nCorrect Answer: "${q.answer}"\nUser Answer: "${q.userAnswer}"`
+          `Question: "${q.question}"\nCorrect Answer: "${q.answer}"\nUser Answer: "${q.userAnswer}"`,
       )
       .join("\n\n");
 
@@ -170,7 +170,7 @@ export async function getAssessments() {
 
 export async function updateBookmarkedQuestions(
   assessmentId,
-  bookmarkedQuestions
+  bookmarkedQuestions,
 ) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
